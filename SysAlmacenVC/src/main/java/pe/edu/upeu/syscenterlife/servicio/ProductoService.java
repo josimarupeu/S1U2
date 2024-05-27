@@ -1,13 +1,20 @@
 package pe.edu.upeu.syscenterlife.servicio;
 
+import static java.lang.Math.log;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.logging.Level;
+import pe.com.syscenterlife.autocomp.ModeloDataAutocomplet;
 import pe.edu.upeu.syscenterlife.modelo.Producto;
 import pe.edu.upeu.syscenterlife.repositorio.ProductoRepository;
+import pe.edu.upeu.syscenterlife.util.ErrorLogger;
 
 @Service
 public class ProductoService {
+    ErrorLogger log=new ErrorLogger("ClienteService.class");
+    
 
     @Autowired
     ProductoRepository productoRepository;
@@ -35,7 +42,26 @@ public class ProductoService {
     // Buscar por ID
     public Producto buscarProducto(Integer idProducto) {
         return productoRepository.findById(idProducto).orElse(null);
-    
+
+    }
+
+    public List<ModeloDataAutocomplet> listAutoCompletProducto(String nombre) {
+        List<ModeloDataAutocomplet> listarProducto = new ArrayList<>();
+
+        try {
+            for (Producto producto : productoRepository.listAutoCompletProducto(nombre + "%")) {
+                ModeloDataAutocomplet data = new ModeloDataAutocomplet();
+                ModeloDataAutocomplet.TIPE_DISPLAY = "ID";
+                data.setIdx(producto.getNombre());
+                data.setNombreDysplay(String.valueOf(producto.getIdProducto()));
+                data.setOtherData(producto.getPu() + ":" + producto.getStock());
+                listarProducto.add(data);
+            }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "create", e);
+        }
+
+        return listarProducto;
     }
 
 }

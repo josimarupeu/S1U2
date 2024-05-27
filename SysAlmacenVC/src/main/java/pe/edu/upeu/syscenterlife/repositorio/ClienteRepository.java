@@ -12,5 +12,8 @@ public interface ClienteRepository extends
         JpaRepository<Cliente, String> {
 
     @Query(value = "SELECT * FROM Cliente WHERE nombrers like :nombre", nativeQuery = true)
-    List<Cliente> findByNombre(@Param(value = "nombre")String nombre);
+    List<Cliente> findByNombre(@Param(value = "nombre") String nombre);
+
+    @Query(value = "SELECT c.* FROM Cliente c WHERE c.nombrers like :filter", nativeQuery = true)
+    List<Cliente> listAutoCompletCliente(@Param("filter") String filter);
 }
