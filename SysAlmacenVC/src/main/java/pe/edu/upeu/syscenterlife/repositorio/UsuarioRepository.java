@@ -13,6 +13,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
              nativeQuery = true)
     Usuario buscarUsuario(@Param("dnix") String dnix);
 
-    @Query(value = "SELECT u.* FROM Usuario u WHERE u.user=:user and u.clave=:clave", nativeQuery = true)
+    @Query(value = "SELECT u.* FROM Usuario u WHERE u.user=:userx and u.clave=:clave", nativeQuery = true)
     Usuario loginUsuario(@Param("userx") String user, @Param("clave") String clave);
 }
